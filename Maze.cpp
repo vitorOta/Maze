@@ -68,6 +68,8 @@ int randomNextMove(int lastMove, int currentColumn, int currentRow){
 		}
 
 		canMove = !isOpositeMove && isPossibleMoveTo;
+		
+		cout << moveTo << " canMove ? " << canMove;
 
 	} while(!canMove);
 	return moveTo;
@@ -85,15 +87,15 @@ void generateMaze(int maze[mazeSize][mazeSize]){
 	int markAsGenerated = 99999999; 
 
 	//marking the path
-	for (int column = 0; column < mazeSize; i++) {
+	for (int column = 0; column < mazeSize; column++) {
 		for (int row = 0; row < mazeSize; row++) {
 			//the position [0][0] is the startPoint
 			//the position [mazeSize][mazeSize] is the endPoint
 			if((column == 0 && row == 0) || (column == mazeSize-1 && row == mazeSize-1)){
-				field = markAsGenerated;
+				maze[column][row] = markAsGenerated;
 			}else{
 				moveTo = randomNextMove(lastMove,column, row);
-				maze[j][i] = markAsGenerated;				
+				maze[column][row] = markAsGenerated;				
 				lastMove = moveTo;
 			}
 		}
@@ -101,23 +103,23 @@ void generateMaze(int maze[mazeSize][mazeSize]){
 
 
 	//populating maze
-	for (int column = 0; column < mazeSize; i++) {
+	for (int column = 0; column < mazeSize; column++) {
 		for (int row = 0; row < mazeSize; row++) {
 			int field = initial;
-			if(maze[j][i] != markAsGenerated){
+			if(maze[column][row] != markAsGenerated){
 				field = generateRandom(2) == 0 ? wall : initial;				
 			}
 
-			maze[j][i] = field;
+			maze[column][row] = field;
 		}
 	}
     return maze;
 }
 
 void printMaze(int maze[mazeSize][mazeSize]){
-    for (int i = 0;i < 10;i++) {
-		for (int j = 0;j < 10;j++) {
-			int field = labirinto[i][j];
+    for (int column = 0;column < 10;column++) {
+		for (int row = 0;row < 10;row++) {
+			int field = maze[column][row];
 			cout << (field == wall ? wallChar : field==player ? playerChar : emptyChar);
 		}
 		cout << endl;
