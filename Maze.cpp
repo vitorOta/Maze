@@ -1,6 +1,8 @@
 #include <iostream>
 #include <stdlib.h> /* srand, rand */
 #include <time.h> /* time */
+#include <termios.h>
+#include <stdio.h>
 
 using namespace std;
 
@@ -24,6 +26,53 @@ const int toUp = 3;
 const int mazeSize = 20;
 
 bool randomSeedInitialized = false;
+
+
+/* simulate getche (from https://stackoverflow.com/questions/7469139/what-is-equivalent-to-getch-getche-in-linux)*/
+
+
+static struct termios old, new1;
+
+/* Initialize new terminal i/o settings */
+void initTermios(int echo) 
+{
+  tcgetattr(0, &old); /* grab old terminal i/o settings */
+  new1 = old; /* make new settings same as old settings */
+  new1.c_lflag &= ~ICANON; /* disable buffered i/o */
+  new1.c_lflag &= echo ? ECHO : ~ECHO; /* set echo mode */
+  tcsetattr(0, TCSANOW, &new1); /* use these new terminal i/o settings now */
+}
+
+/* Restore old terminal i/o settings */
+void resetTermios(void) 
+{
+  tcsetattr(0, TCSANOW, &old);
+}
+
+/* Read 1 character - echo defines echo mode */
+char getch_(int echo) 
+{
+  char ch;
+  initTermios(echo);
+  ch = getchar();
+  resetTermios();
+  return ch;
+}
+
+/* Read 1 character without echo */
+char getch(void) 
+{
+  return getch_(0);
+}
+
+/* Read 1 character with echo */
+char getche(void) 
+{
+  return getch_(1);
+}
+/*----------------*/
+
+
 int generateRandom(int max)
 {
     if (!randomSeedInitialized) {
@@ -36,7 +85,6 @@ int generateRandom(int max)
 
 void printMaze(int maze[mazeSize][mazeSize])
 {
-	cout<<"----------"<<endl;
     for (int column = 0; column < mazeSize; column++) {
         for (int row = 0; row < mazeSize; row++) {
             int field = maze[column][row];
@@ -44,7 +92,6 @@ void printMaze(int maze[mazeSize][mazeSize])
         }
         cout << endl;
     }
-	cout<<"----------"<<endl;
 }
 
 bool isPossibleMoveTo(int maze[mazeSize][mazeSize], int moveTo, int currentColumn, int currentRow)
@@ -151,11 +198,27 @@ void generateMaze(int maze[mazeSize][mazeSize])
     }
 }
 
+bool isGameEnd(int maze[mazeSize][mazeSize]){
+    return maze[mazeSize][mazeSize] == player;
+}
+
+void startGame(int maze[mazeSize][mazeSize]){
+    int keyPressed;
+
+
+    while(!isGameEnd){
+        printMaze(maze);
+        keyPressed = getche();
+    }
+    
+}
+
+
 int main()
 {
     int maze[mazeSize][mazeSize];
     generateMaze(maze);
-    printMaze(maze);
+    startGame(maze);
 
     return 0;
 }
