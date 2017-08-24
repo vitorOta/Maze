@@ -1,8 +1,6 @@
 #include <iostream>
 #include <stdlib.h> /* srand, rand */
 #include <time.h> /* time */
-#include <termios.h>
-#include <stdio.h>
 
 using namespace std;
 
@@ -27,50 +25,6 @@ const int mazeSize = 20;
 
 bool randomSeedInitialized = false;
 
-
-/* simulate getche (from https://stackoverflow.com/questions/7469139/what-is-equivalent-to-getch-getche-in-linux)*/
-
-
-static struct termios old, new1;
-
-/* Initialize new terminal i/o settings */
-void initTermios(int echo) 
-{
-  tcgetattr(0, &old); /* grab old terminal i/o settings */
-  new1 = old; /* make new settings same as old settings */
-  new1.c_lflag &= ~ICANON; /* disable buffered i/o */
-  new1.c_lflag &= echo ? ECHO : ~ECHO; /* set echo mode */
-  tcsetattr(0, TCSANOW, &new1); /* use these new terminal i/o settings now */
-}
-
-/* Restore old terminal i/o settings */
-void resetTermios(void) 
-{
-  tcsetattr(0, TCSANOW, &old);
-}
-
-/* Read 1 character - echo defines echo mode */
-char getch_(int echo) 
-{
-  char ch;
-  initTermios(echo);
-  ch = getchar();
-  resetTermios();
-  return ch;
-}
-
-/* Read 1 character without echo */
-char getch(void) 
-{
-  return getch_(0);
-}
-
-/* Read 1 character with echo */
-char getche(void) 
-{
-  return getch_(1);
-}
-/*----------------*/
 
 
 int generateRandom(int max)
@@ -203,7 +157,6 @@ bool isGameEnd(int maze[mazeSize][mazeSize]){
 }
 
 void startGame(int maze[mazeSize][mazeSize]){
-    int keyPressed;
     int currentColumn = 0;
     int currentRow = 0;
 
@@ -213,14 +166,18 @@ void startGame(int maze[mazeSize][mazeSize]){
     int moveTo=-1;
     
     printMaze(maze);
+    int c =0;
     
-    while(!isGameEnd){
+    while(c++<2){
         //TODO this getche wasn't work as expected, see this
         //use wdsa for now
         
         
-        cout<<"-------------"<<"Direction (w a s d): ";
-        keyPressed = getche();
+        int keyPressed;
+        
+        cout<<endl<<"-------------"<<"Direction (w a s d): ";
+        cin>>keyPressed;
+
         switch(keyPressed){
             case 119: //w
                 moveTo = toUp;
@@ -235,6 +192,7 @@ void startGame(int maze[mazeSize][mazeSize]){
                 break;
             
         }
+        cout<<endl<<moveTo<<endl;
         
         moveOnMaze(maze, moveTo, player, currentColumn, currentRow);
         printMaze(maze);
