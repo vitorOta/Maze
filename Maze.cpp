@@ -134,10 +134,10 @@ void generateMaze(int maze[mazeSize][mazeSize])
     while (!(currentColumn == mazeSize - 1 && currentRow == mazeSize - 1)) {
         //TODO check this, i think that is not correct, but I'm without time to see this now
         int moveTo = randomNextMove(maze, lastMove, currentColumn, currentRow);
-        moveOnMaze(maze, moveTo, player, currentColumn, currentRow);
+        moveOnMaze(maze, moveTo, markAsGenerated, currentColumn, currentRow);
         lastMove = moveTo;
-		system("cls");
-		printMaze(maze);
+		//system("cls");
+		//printMaze(maze);
 	}
 
     //populating maze
