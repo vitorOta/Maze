@@ -204,11 +204,40 @@ bool isGameEnd(int maze[mazeSize][mazeSize]){
 
 void startGame(int maze[mazeSize][mazeSize]){
     int keyPressed;
+    int currentColumn = 0;
+    int currentRow = 0;
 
 
+    maze[currentColumn][currentRow] = player;
+    
+    int moveTo=-1;
+    
+    printMaze(maze);
+    
     while(!isGameEnd){
-        printMaze(maze);
+        //TODO this getche wasn't work as expected, see this
+        //use wdsa for now
+        
+        
+        cout<<"-------------"<<"Direction (w a s d): ";
         keyPressed = getche();
+        switch(keyPressed){
+            case 119: //w
+                moveTo = toUp;
+            case 100://d
+                moveTo=toRight;
+                break;
+            case 115://s
+                moveTo=toDown;
+                break;
+            case 97: //a
+                moveTo = toLeft;
+                break;
+            
+        }
+        
+        moveOnMaze(maze, moveTo, player, currentColumn, currentRow);
+        printMaze(maze);
     }
     
 }
@@ -219,6 +248,5 @@ int main()
     int maze[mazeSize][mazeSize];
     generateMaze(maze);
     startGame(maze);
-
     return 0;
 }
