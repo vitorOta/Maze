@@ -21,7 +21,7 @@ const int toLeft = 2;
 const int toUp = 3;
 
 //config
-const int mazeSize = 11;
+const int mazeSize = 20;
 
 bool randomSeedInitialized = false;
 int generateRandom(int max)
@@ -37,8 +37,8 @@ int generateRandom(int max)
 void printMaze(int maze[mazeSize][mazeSize])
 {
 	cout<<"----------"<<endl;
-    for (int column = 0; column < 10; column++) {
-        for (int row = 0; row < 10; row++) {
+    for (int column = 0; column < mazeSize; column++) {
+        for (int row = 0; row < mazeSize; row++) {
             int field = maze[column][row];
             cout << (field == wall ? wallChar : field == player? playerChar : emptyChar);
         }
@@ -136,8 +136,6 @@ void generateMaze(int maze[mazeSize][mazeSize])
         int moveTo = randomNextMove(maze, lastMove, currentColumn, currentRow);
         moveOnMaze(maze, moveTo, markAsGenerated, currentColumn, currentRow);
         lastMove = moveTo;
-		//system("cls");
-		//printMaze(maze);
 	}
 
     //populating maze
