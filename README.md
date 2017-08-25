@@ -1,7 +1,7 @@
 *For fun*
 
 # Maze
-C++ Maze Game
+C++ Maze Game (see [Java version](https://github.com/vitorOta/MazeFX))
 
 ### // TODO
 1. [x] create a function to generate random mazes
