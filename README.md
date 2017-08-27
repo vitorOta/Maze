@@ -1,7 +1,11 @@
+
+# DISCONTINUED (go to [Java version](https://github.com/vitorOta/MazeFX))
+
 *For fun*
 
-# Maze
-C++ Maze Game (see [Java version](https://github.com/vitorOta/MazeFX))
+## Maze
+C++ Maze Game 
+
 
 ### // TODO
 1. [x] create a function to generate random mazes
